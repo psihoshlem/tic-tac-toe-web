@@ -1,5 +1,6 @@
 from typing import List
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+import uvicorn
 
 app = FastAPI()
 
@@ -119,3 +120,6 @@ async def websocket_endpoint(websocket: WebSocket):
 async def reg():
     
     return 
+
+if __name__=="__main__":
+    uvicorn.run("main:app", port=8000, reload=True)
