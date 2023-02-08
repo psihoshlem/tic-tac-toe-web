@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XOgame</title>
+</head>
+<body>
+    <div id="information">
+        <div id="players_count_div">Count of players: <a id="players_count">0</a></div>
+        <div id="current_player_div">Current player: <a id="current_player">-</a></div>
+        <div id="self_div">You play by: <a id="self">-</a></div>
+    </div>
+    <div id="board_container">
+        <table id="board">
+            <tr>
+                <td id="1" onclick="cellClick(1)"></td>
+                <td id="2" onclick="cellClick(2)"></td>
+                <td id="3" onclick="cellClick(3)"></td>
+            </tr>
+            <tr>
+                <td id="4" onclick="cellClick(4)"></td>
+                <td id="5" onclick="cellClick(5)"></td>
+                <td id="6" onclick="cellClick(6)"></td>
+            </tr>
+            <tr>
+                <td id="7" onclick="cellClick(7)"></td>
+                <td id="8" onclick="cellClick(8)"></td>
+                <td id="9" onclick="cellClick(9)"></td>
+            </tr>
+        </table>
+    </div>
+    <div id="other_information"></div>
+</body>
+</html>
+
+<style>
+    #board{
+        width: 600px;
+        height: 600px;
+        text-align:center;
+    }
+    td{
+        border: 1px solid black;
+        width: 197.86px;
+        height: 197.86px;
+        font-size: 100px;
+    }
+    #information
+    {
+        text-align:center;
+    }
+    #players_count_div, #current_player_div, #self_div
+    {
+        display:inline;
+        font-size: 20px;
+        margin-right: 35px;
+    }
+    #board_container{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    #other_information{
+        text-align: center;
+        font-size: 40px;
+    }
+</style>
+
+<script>
+    let ws = new WebSocket("ws://127.0.0.1:8000/ws");
+    let players_count = document.getElementById("players_count");
+    let current_player = document.getElementById("current_player");
+    let self = document.getElementById('self');
+    let other_information = document.getElementById('other_information');
+    let player = null;
+    let currentPlayer = null;
+    let swaper = {
+        "X": "O",
+        "O": "x"
+    }
+
+    function cellClick(id){
+        cell = document.getElementById(id);
+        if(cell.innerHTML == '' & player==currentPlayer){
+            ws.send(JSON.stringify({player: player, cell: id}));
+        }
+        else {
+            other_information.innerHTML = "This cell can't be choosed!"
+        }
+    }
+
+    ws.onopen = function(e){
+        other_information.innerHTML = "Connection closed...";
+    }
+
+    ws.onmessage = function(e){
+        response = JSON.parse(e.data);
+        if (response["stage"] == "init"){
+            players_count.innerHTML = response["players_count"];
+            player = response["self"];
+            self.innerHTML = response["self"]; 
+            if(response["players_count"]==2){
+                other_information.innerHTML = "Game has been started";
+                currentPlayer = 'X';
+                current_player.innerHTML = 'X';
+            }
+        }
+        if (response["stage"] == "active"){
+            updateCell(response["cell"], response["sign"]);
+            current_player.innerHTML = response["current_player"];
+            currentPlayer = response["current_player"];
+        }
+        if (response["stage"] == "end"){
+            updateCell(response["cell"], response["sign"]);
+            currentPlayer = null;
+            current_player.innerHTML = ""
+            other_information.innerHTML = "Game over! Winner is " + response["winner"];
+        }
+    }
+
+    function updateCell(id, sign){
+        cell = document.getElementById(id);
+        cell.innerHTML = sign;
+    }
+
+    ws.onclose = function(e){
+        console.log(e)
+    }
+</script>
