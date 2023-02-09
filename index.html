@@ -76,10 +76,6 @@
     let other_information = document.getElementById('other_information');
     let player = null;
     let currentPlayer = null;
-    let swaper = {
-        "X": "O",
-        "O": "x"
-    }
 
     function cellClick(id){
         cell = document.getElementById(id);
@@ -118,6 +114,10 @@
             current_player.innerHTML = ""
             other_information.innerHTML = "Game over! Winner is " + response["winner"];
         }
+    }
+
+    function redWinner(){
+
     }
 
     function updateCell(id, sign){

@@ -49,7 +49,6 @@ def update_board(data):
     board[int(data["cell"])-1] = data["player"]
 
 def is_won():
-    global board
     return (
         board[0] == board[1] == board[2] != None or
         board[3] == board[4] == board[5] != None or
@@ -91,8 +90,6 @@ async def websocket_endpoint(websocket: WebSocket):
                     'cell': response['cell'],
                     'sign': response['player']
                 }
-                # manager.disconnect(websocket)
-                # board = init_board()
             elif is_draw():
                 data={
                     'stage': 'end',
@@ -101,8 +98,6 @@ async def websocket_endpoint(websocket: WebSocket):
                     'cell': response['cell'],
                     'sign': response['player']
                 }
-                # manager.disconnect(websocket)
-                # board = init_board()
             else:
                 data = {
                     'stage': 'active',
@@ -115,11 +110,6 @@ async def websocket_endpoint(websocket: WebSocket):
         manager.disconnect(websocket)
     except:
         pass
-
-@app.get("/reg")
-async def reg():
-    
-    return 
 
 if __name__=="__main__":
     uvicorn.run("main:app", port=8000, reload=True)
