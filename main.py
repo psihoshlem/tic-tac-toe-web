@@ -111,5 +111,10 @@ async def websocket_endpoint(websocket: WebSocket):
     except:
         pass
 
+@app.get("/reg")
+async def reg():
+    
+    return 
+
 if __name__=="__main__":
     uvicorn.run("main:app", port=8000, reload=True)
