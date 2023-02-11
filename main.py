@@ -1,16 +1,10 @@
 from fastapi import FastAPI
 import uvicorn
-from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 
 from routers import log
 from routers import game
 
-# from gamelogic import app
-
-class User(BaseModel):
-    login: str
-    password: str
 
 app = FastAPI()
 app.add_middleware(
