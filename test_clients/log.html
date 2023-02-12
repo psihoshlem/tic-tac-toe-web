@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reg</title>
+</head>
+<body>
+    <div id="reg_box">
+        <div id="login">login:<input type="text" id="login_in"></div>
+        <div id="password">password:<input type="text" id="password_in"></div>
+        <button id="sign_up" onclick="send_data()">sign up</button>
+    </div>
+</body>
+</html>
+<style>
+#reg_box{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<script>
+    let login = document.getElementById("login_in")
+    let password = document.getElementById("password_in")
+    function send_data(){
+        var xhr = new XMLHttpRequest();
+
+        var json = JSON.stringify({
+            login: login.value,
+            password: password.value
+        });
+
+        xhr.open("POST", 'http://127.0.0.1:8000/log', true)
+        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+
+        xhr.onreadystatechange = function () {
+            if(xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                console.log(xhr.responseText);
+            };
+        };
+        xhr.send(json);
+    }
+</script>
