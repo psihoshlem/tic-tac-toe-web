@@ -18,26 +18,14 @@ def add_new_user(user: dict):
 # для входа
 def get_user_data(login: str):
    cur.execute(f"select * from users where login='{login}'")
-   print(cur.fetchall())
+   password, salt = cur.fetchall()[0][2:]
+   return password, salt
 
 
 def is_user_exist(login: str):
    cur.execute(f"select * from users where login='{login}'")
    return cur.fetchall()!=[]
 
-def delete_user_by_admin(login: str):
-   cur.execute(f"DELETE FROM users WHERE lname='{login}';")
-   conn.commit()
-
-
-def delete_user_by_admin(user: dict):
-   pass
-
-
-# get_user_data()
-# cur.execute(f"select * from users")
-# for item in cur.fetchall():
-#    print(item[1])
 
 users = [
 'senks',
