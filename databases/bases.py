@@ -25,14 +25,3 @@ def get_user_data(login: str):
 def is_user_exist(login: str):
    cur.execute(f"select * from users where login='{login}'")
    return cur.fetchall()!=[]
-
-
-users = [
-'senks',
-'root',
-'admin',
-'no_exist'
-]
-
-for user in users:
-   print(is_user_exist(user))
