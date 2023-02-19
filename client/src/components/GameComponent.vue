@@ -39,38 +39,42 @@ export default {
   },
   methods:{
     cellClick: function(id){
-        console.log(this.players_count)
-        console.log(id)
+        var cell = document.getElementById(id)
+        if(cell.textContent == '' & this.self==this.current_player){
+            this.connection.send(JSON.stringify({player: this.self, cell: id}));
+            console.log("SENDED")
+        }
+        else {
+            // other_information.innerHTML = "This cell can't be choosed!"
+        }
+    },
+    updateCell: function(id, sign){
+        document.getElementById(id).textContent = sign
     }
   },
   created: function() {
-    console.log("Starting connection to WebSocket Server")
+    // console.log("Starting connection to WebSocket Server")
     this.connection = new WebSocket("ws://127.0.0.1:8000/ws")
 
-    this.connection.onmessage = function(event) {
-      var response = JSON.parse(event.data)
-      console.log(response)
-      if (response["stage"] == "init"){
-          console.log("ok")
-          this.players_count = response["players_count"];
-          console.log(response["players_count"])
-          this.self = response["self"];
-          if(response["players_count"]==2){
-            //   other_information.innerHTML = "Game has been started";
-              this.current_player = 'X';
-          }
-      }
-        // if (response["stage"] == "active"){
-        //     updateCell(response["cell"], response["sign"]);
-        //     current_player.innerHTML = response["current_player"];
-        //     currentPlayer = response["current_player"];
-        // }
-        // if (response["stage"] == "end"){
-        //     updateCell(response["cell"], response["sign"]);
-        //     currentPlayer = null;
-        //     current_player.innerHTML = ""
-        //     other_information.innerHTML = "Game over! Winner is " + response["winner"];
-        // }
+    this.connection.onmessage = (event) => {
+        var response = JSON.parse(event.data)
+        console.log(response)
+        if (response["stage"] == "init"){
+            this.players_count = response["players_count"]
+            this.self = response["self"]
+            if(response["players_count"]==2){
+                this.current_player = 'X';
+            }
+        }
+        if (response["stage"] == "active"){
+            this.updateCell(response["cell"], response["sign"]);
+            this.current_player = response["current_player"];
+        }
+        if (response["stage"] == "end"){
+            this.updateCell(response["cell"], response["sign"]);
+            this.current_player = "-"
+            // other_information.innerHTML = "Game over! Winner is " + response["winner"];
+        }
     }
 
     this.connection.onopen = function(event) {
