@@ -1,30 +1,29 @@
 <template>
-    <div class="root">
-        <div id="information">
-        <div id="players_count_div">Count of players: {{players_count}}/2</div>
-        <div id="current_player_div">Current player: {{current_player}}</div>
-        <div id="self_div">You play by: {{self}}</div>
-    </div>
-    <div id="board_container">
-        <table id="board">
-            <tr>
-                <td id="1" v-on:click="cellClick(1)"></td>
-                <td id="2" v-on:click="cellClick(2)"></td>
-                <td id="3" v-on:click="cellClick(3)"></td>
-            </tr>
-            <tr>
-                <td id="4" v-on:click="cellClick(4)"></td>
-                <td id="5" v-on:click="cellClick(5)"></td>
-                <td id="6" v-on:click="cellClick(6)"></td>
-            </tr>
-            <tr>
-                <td id="7" v-on:click="cellClick(7)"></td>
-                <td id="8" v-on:click="cellClick(8)"></td>
-                <td id="9" v-on:click="cellClick(9)"></td>
-            </tr>
-        </table>
-    </div>
-    <div id="other_information"></div>
+    <div id="container">
+        <div class="root">
+            <div id="information">
+            <div id="players_count_div">Count of players: {{players_count}}/2</div>
+            <div id="current_player_div">Current player: {{current_player}}</div>
+            <div id="self_div">You play by: {{self}}</div>
+        </div>
+        <div id="board_container">
+            <table id="board">
+                <tr>
+                    <td id="1" v-on:click="cellClick(1)"></td>
+                    <td id="2" v-on:click="cellClick(2)"></td>
+                    <td id="3" v-on:click="cellClick(3)"></td>
+                </tr>
+                <tr>
+                    <td id="4" v-on:click="cellClick(4)"></td>
+                    <td id="5" v-on:click="cellClick(5)"></td>
+                    <td id="6" v-on:click="cellClick(6)"></td>
+                </tr>
+                <tr>
+                    <td id="7" v-on:click="cellClick(7)"></td>
+                    <td id="8" v-on:click="cellClick(8)"></td>
+                    <td id="9" v-on:click="cellClick(9)"></td>
+                </tr>
+            </table>
     </div>
 </template>
 <script>
@@ -41,8 +40,7 @@ export default {
     cellClick: function(id){
         var cell = document.getElementById(id)
         if(cell.textContent == '' & this.self==this.current_player){
-            this.connection.send(JSON.stringify({player: this.self, cell: id}));
-            console.log("SENDED")
+            this.connection.send(JSON.stringify({player: this.self, cell: id}))
         }
         else {
             // other_information.innerHTML = "This cell can't be choosed!"

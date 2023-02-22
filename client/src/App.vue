@@ -1,16 +1,19 @@
 <template>
   <div id="app">
-    <GameComponent/>
+    <!-- <GameComponent/> -->
+    <AuthComponent/>
   </div>
 </template>
 
 <script>
-import GameComponent from './components/GameComponent.vue'
+// import GameComponent from './components/GameComponent.vue'
+import AuthComponent from './components/AuthComponent.vue'
 
 export default {
   name: 'App',
   components: {
-    GameComponent
+    // GameComponent,
+    AuthComponent
   }
 }
 </script>
