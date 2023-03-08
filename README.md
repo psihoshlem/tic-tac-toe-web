@@ -1,4 +1,4 @@
-# XOgame
+# tic-tac-toe-web
 
 to run server:
 1) pip install -r requiremets.txt
