@@ -35,8 +35,5 @@ async def log(user: User):
     if not is_user_exist(user.login):
         return False
     else:
-        password, salt = get_user_data(user.login)
-        if hashlib.pbkdf2_hmac('sha256', user.password.encode('utf-8'), salt, 100000) == password:
-            return True
-        else:
-            return False
+        password_from_db, salt = get_user_data(user.login)
+        return hashlib.pbkdf2_hmac('sha256', user.password.encode('utf-8'), salt, 100000) == password_from_db

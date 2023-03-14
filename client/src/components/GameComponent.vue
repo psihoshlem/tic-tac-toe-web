@@ -1,7 +1,6 @@
 <template>
     <div id="container">
-        <div class="root">
-            <div id="information">
+        <div id="information">
             <div id="players_count_div">Count of players: {{players_count}}/2</div>
             <div id="current_player_div">Current player: {{current_player}}</div>
             <div id="self_div">You play by: {{self}}</div>
@@ -24,6 +23,7 @@
                     <td id="9" v-on:click="cellClick(9)"></td>
                 </tr>
             </table>
+        </div>
     </div>
 </template>
 <script>

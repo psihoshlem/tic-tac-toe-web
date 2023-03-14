@@ -1,29 +1,29 @@
 <template>
   <div id="container">
     <div class="swap-form-container">
-      <button class="swap-form-btn" v-on:click="swap_form(2)">sing in</button>
-      <button class="swap-form-btn" v-on:click="swap_form(1)">sing up</button>
+      <button class="swap-form-btn" v-on:click="swap_form(1)">sing in</button>
+      <button class="swap-form-btn" v-on:click="swap_form(2)">sing up</button>
     </div>
     <div class="container">
-      <div class="sign_in" v-show="step===2">
+      <div class="sign_in" v-show="step===1">
         <div class="brand-title">SIGN IN</div>
         <div class="inputs">
           <label>LOGIN</label>
-          <input type="login" placeholder="login" />
+          <input v-model="login" type="login" placeholder="login" />
           <label>PASSWORD</label>
-          <input type="password" placeholder="Min 6 charaters long" />
-          <button class="submit" type="submit">SIGN IN</button>
+          <input v-model="password" type="password" placeholder="password" />
+          <button class="submit" type="submit" v-on:click="sign_in()">SIGN IN</button>
         </div>
       </div>
-      <div class="sign_in" v-show="step===1">
+      <div class="sign_in" v-show="step===2">
         <div class="brand-title">SIGN UP</div>
         <div class="inputs">
           <label>LOGIN</label>
-          <input type="login" placeholder="login" />
+          <input v-model="login" type="login" placeholder="login" />
           <label>PASSWORD</label>
-          <input type="password" placeholder="Min 6 charaters long" />
-          <input type="password" placeholder="Retry please" />
-          <button class="submit" type="submit">SIGN UP</button>
+          <input v-model="password" type="password" placeholder="Min 6 charaters long" />
+          <input v-model="retried_password" type="password" placeholder="Retry please" />
+          <button class="submit" type="submit" v-on:click="sign_up()">SIGN UP</button>
         </div>
       </div>
     </div>
@@ -35,19 +35,60 @@
     data() {
       return {
         name: 'AuthComponent',
-        step: 1
+        step: 1,
+        login: "",
+        password: "",
+        retried_password: "",
+        auth: false
       }
     },
     methods: {
-      swap_form : function(n){
+      swap_form: function(n){
         this.step = n
+        console.log(this.auth)
+      },
+      sign_in: function(){
+        console.log("login")
+        var xhr = new XMLHttpRequest();
+
+        var json_user_data = JSON.stringify({
+            login: this.login,
+            password: this.password
+        });
+
+        xhr.open("POST", 'http://127.0.0.1:8000/log', true)
+        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        xhr.onreadystatechange = function () {
+          if (this.readyState==this.DONE){
+            this.auth = (xhr.responseText == "true")
+            console.log(this.auth)
+          }
+        }
+        xhr.send(json_user_data);
+      },
+      sign_up: function(){
+        console.log("reg")
+        var xhr = new XMLHttpRequest();
+
+        var json_user_data = JSON.stringify({
+          login: this.login,
+          password: this.password
+        });
+
+        xhr.open("POST", 'http://127.0.0.1:8000/reg', true)
+        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        xhr.onreadystatechange = function () {
+          console.log(xhr.responseText)
+        }
+        xhr.send(json_user_data);
+        console.log(this.auth)
       }
     }
   }
 </script>
 <style>
 input {
-  caret-color: red;
+  caret-color: black;
 }
 
 body {
@@ -61,7 +102,7 @@ body {
   justify-content: center;
   place-items: center;
   overflow: hidden;
-  font-family: poppins;
+  /* font-family: poppins; */
 }
 
 .container {
